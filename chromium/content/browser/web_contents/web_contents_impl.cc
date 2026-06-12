@@ -5939,7 +5939,7 @@ bool WebContentsImpl::ShouldIgnoreUnresponsiveRenderer() {
 }
 
 ui::AXMode WebContentsImpl::GetAccessibilityMode() {
-  LOG(INFO) << "WebContentsImpl::GetAccessibilityMode: returning flags=" << static_cast<int>(accessibility_mode_.value());
+  LOG(INFO) << "WebContentsImpl::GetAccessibilityMode: returning flags=" << accessibility_mode_.flags();
   return accessibility_mode_;
 }
 

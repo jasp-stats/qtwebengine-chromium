@@ -13300,7 +13300,7 @@ RenderFrameHostImpl::GetOrCreateBrowserAccessibilityManager() {
   ui::AXMode accessibility_mode = delegate_->GetAccessibilityMode();
   if (!accessibility_mode.has_mode(ui::AXMode::kNativeAPIs)) {
     LOG(INFO) << "GetOrCreateBrowserAccessibilityManager: No kNativeAPIs mode, returning nullptr";
-    LOG(INFO) << "GetOrCreateBrowserAccessibilityManager: Current mode flags=" << static_cast<int>(accessibility_mode.value());
+    LOG(INFO) << "GetOrCreateBrowserAccessibilityManager: Current mode flags=" << accessibility_mode.flags();
     DCHECK(!browser_accessibility_manager_);
     return nullptr;
   }
