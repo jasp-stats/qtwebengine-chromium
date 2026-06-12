@@ -8,6 +8,7 @@
 #include "base/check.h"
 #include "base/functional/bind.h"
 #include "base/location.h"
+#include "base/logging.h"
 #import "base/mac/mac_util.h"
 #include "base/strings/sys_string_conversions.h"
 #include "base/strings/utf_string_conversions.h"
@@ -61,7 +62,13 @@ BrowserAccessibilityManagerMac::BrowserAccessibilityManagerMac(
     AXNodeIdDelegate& node_id_delegate,
     AXPlatformTreeManagerDelegate* delegate)
     : BrowserAccessibilityManager(node_id_delegate, delegate) {
+  LOG(INFO) << "BrowserAccessibilityManagerMac::ctor: Creating new manager";
+  LOG(INFO) << "BrowserAccessibilityManagerMac::ctor: Initial tree root_id=" 
+            << initial_tree.root_id;
+  LOG(INFO) << "BrowserAccessibilityManagerMac::ctor: Initial tree has " 
+            << initial_tree.nodes.size() << " nodes";
   Initialize(initial_tree);
+  LOG(INFO) << "BrowserAccessibilityManagerMac::ctor: After Initialize";
 }
 
 BrowserAccessibilityManagerMac::~BrowserAccessibilityManagerMac() = default;

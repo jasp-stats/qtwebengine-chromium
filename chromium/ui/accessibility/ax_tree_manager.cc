@@ -5,6 +5,7 @@
 #include "ui/accessibility/ax_tree_manager.h"
 
 #include "base/debug/crash_logging.h"
+#include "base/logging.h"
 #include "base/no_destructor.h"
 #include "ui/accessibility/ax_common.h"
 #include "ui/accessibility/ax_export.h"
@@ -130,10 +131,17 @@ bool AXTreeManager::IsView() const {
 }
 
 void AXTreeManager::Initialize(const AXTreeUpdate& initial_tree) {
+  LOG(INFO) << "AXTreeManager::Initialize: Starting initialization";
+  LOG(INFO) << "AXTreeManager::Initialize: root_id=" << initial_tree.root_id;
+  LOG(INFO) << "AXTreeManager::Initialize: nodes.size()=" << initial_tree.nodes.size();
   if (!ax_tree()->Unserialize(initial_tree)) {
     LOG(FATAL) << "No recovery is possible if the initial tree is broken: "
                << ax_tree()->error() << ", AXTreeUpdate info: "
                << initial_tree.ToString().substr(0, 500);
+  }
+  LOG(INFO) << "AXTreeManager::Initialize: After Unserialize, root=" << ax_tree()->root();
+  if (ax_tree()->root()) {
+    LOG(INFO) << "AXTreeManager::Initialize: Root node ID=" << ax_tree()->root()->id();
   }
 }
 

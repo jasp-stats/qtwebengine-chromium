@@ -22,6 +22,7 @@
 #include "base/debug/crash_logging.h"
 #include "base/debug/dump_without_crashing.h"
 #include "base/feature_list.h"
+#include "base/logging.h"
 #include "base/functional/bind.h"
 #include "base/functional/callback_helpers.h"
 #include "base/json/json_reader.h"
@@ -13298,14 +13299,19 @@ RenderFrameHostImpl::GetOrCreateBrowserAccessibilityManager() {
   // At least basic mode is required; it contains kWebContents and KNativeAPIs.
   ui::AXMode accessibility_mode = delegate_->GetAccessibilityMode();
   if (!accessibility_mode.has_mode(ui::AXMode::kNativeAPIs)) {
+    LOG(INFO) << "GetOrCreateBrowserAccessibilityManager: No kNativeAPIs mode, returning nullptr";
+    LOG(INFO) << "GetOrCreateBrowserAccessibilityManager: Current mode flags=" << static_cast<int>(accessibility_mode.value());
     DCHECK(!browser_accessibility_manager_);
     return nullptr;
   }
 
   if (browser_accessibility_manager_ ||
-      no_create_browser_accessibility_manager_for_testing_)
+      no_create_browser_accessibility_manager_for_testing_) {
+    LOG(INFO) << "GetOrCreateBrowserAccessibilityManager: Returning existing manager";
     return browser_accessibility_manager_.get();
+  }
 
+  LOG(INFO) << "GetOrCreateBrowserAccessibilityManager: Creating new manager";
 #if BUILDFLAG(IS_ANDROID)
   browser_accessibility_manager_.reset(
       BrowserAccessibilityManagerAndroid::Create(*this, this));
