@@ -92,7 +92,7 @@ class Section {
   Section& operator=(Section&& section);
   ~Section();
 
-  friend auto operator<=>(const Section& lhs, const Section& rhs) = default;
+  friend auto operator<=>(const Section& lhs, const Section& rhs) = delete;
   friend bool operator==(const Section& lhs, const Section& rhs) = default;
   explicit operator bool() const;
 
