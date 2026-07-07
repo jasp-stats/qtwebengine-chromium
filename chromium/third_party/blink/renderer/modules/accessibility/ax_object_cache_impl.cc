@@ -864,6 +864,9 @@ AXObjectCacheImpl::AXObjectCacheImpl(Document& document,
       render_accessibility_host_(document.GetExecutionContext()),
       ax_tree_source_(BlinkAXTreeSource::Create(*this)),
       for_snapshot_only_(for_snapshot_only) {
+  LOG(INFO) << "AXObjectCacheImpl::AXObjectCacheImpl: document_url=" << document.BaseURL().GetString().Utf8()
+            << ", ax_mode=" << ax_mode.ToString()
+            << ", for_snapshot_only=" << for_snapshot_only;
   lifecycle_.AdvanceTo(AXObjectCacheLifecycle::kDeferTreeUpdates);
   if (for_snapshot_only) {
     // Inline text boxes are not supported in snapshots, as they are extra noise
@@ -1124,6 +1127,8 @@ const ui::AXMode& AXObjectCacheImpl::GetAXMode() const {
 }
 
 void AXObjectCacheImpl::SetAXMode(const ui::AXMode& ax_mode) {
+  LOG(INFO) << "AXObjectCacheImpl::SetAXMode: old_mode=" << ax_mode_.ToString() 
+            << ", new_mode=" << ax_mode.ToString();
   ax_mode_ = ax_mode;
 }
 

@@ -13187,11 +13187,16 @@ bool RenderFrameHostImpl::IsSameSiteInstance(
 
 void RenderFrameHostImpl::UpdateAccessibilityMode() {
   // Don't update accessibility mode for a frame that hasn't been created yet.
-  if (!IsRenderFrameLive())
+  if (!IsRenderFrameLive()) {
+    LOG(INFO) << "UpdateAccessibilityMode: Frame not live, skipping";
     return;
+  }
 
   ui::AXMode ax_mode = delegate_->GetAccessibilityMode();
   last_ax_mode_ = ax_mode;
+  
+  LOG(INFO) << "UpdateAccessibilityMode: Frame=" << GetGlobalId() << ", mode=" << ax_mode.ToString() 
+            << ", is_first_accessibility_request=" << is_first_accessibility_request_;
 
   if (ax_mode.has_mode(ui::AXMode::kWebContents)) {
     is_first_accessibility_request_ = !render_accessibility_;
@@ -13200,12 +13205,15 @@ void RenderFrameHostImpl::UpdateAccessibilityMode() {
       // Render accessibility is not enabled yet, so bind the interface first.
       GetRemoteAssociatedInterfaces()->GetInterface(&render_accessibility_);
       DCHECK(render_accessibility_);
+      LOG(INFO) << "UpdateAccessibilityMode: Bound render_accessibility_ interface";
     }
     accessibility_reset_token_ = ++g_accessibility_reset_token;
+    LOG(INFO) << "UpdateAccessibilityMode: Calling SetMode with token=" << *accessibility_reset_token_;
     render_accessibility_->SetMode(ax_mode, *accessibility_reset_token_);
   } else {
     // Resetting the Remote signals the renderer to shutdown accessibility
     // in the renderer.
+    LOG(INFO) << "UpdateAccessibilityMode: kWebContents not enabled, resetting render_accessibility_";
     render_accessibility_.reset();
   }
 
